@@ -4,6 +4,7 @@ import numpy as np
 
 
 AHP_val = 0
+LblVal = 0
 RI = [1, 1, 0.58, 0.9, 1.12]
 stage_weight = [0] * 13
 weight_initial = [False,False,False,False,False,False,False,False,False,False,False,False,False]
@@ -40,6 +41,10 @@ def Get_Result(label):
 def Get_Scale(value):
     global AHP_val
     AHP_val = int(value)
+    if (AHP_val>= 0):
+        LblVal['text'] = str(AHP_val+1)
+    else:
+        LblVal['text'] = str(round(1/(-1*AHP_val+1),3))
 
 def Calculate_matrix(size, Ctrls, stage, CR, stage_ctrl):
     matrix=[]
@@ -80,10 +85,18 @@ def Set_Matrix(stage_ctrl, solution_num, group, stage):
     Set_Window.title('set')
     Set_Window.geometry('1000x400')
     Set_Window.configure(background='white')
-    global AHP_val
     
-    scale_h = tk.Scale(Set_Window, from_=-8, to=8, tickinterval=16, length=750, resolution=1, orient="horizontal", command = Get_Scale)
+    global AHP_val
+    scale_h = tk.Scale(Set_Window, from_=-8, to=8, tickinterval=16, length=750, resolution=1, orient="horizontal",fg='white', bg='white', command = Get_Scale, showvalue=False)
     scale_h.pack()
+    global LblVal
+    LblVal = tk.Label(Set_Window, text=('0'), bg='white', fg='black', font=('Arial', 12))
+    LblVal.place(relx=0.5, rely=0.1, anchor='center')
+    LblVal['width']=8
+    LblVal['height']=1
+    
+    
+    
     
     Ctrls = []
     lbl = []
@@ -119,6 +132,7 @@ def Set_Matrix(stage_ctrl, solution_num, group, stage):
     LblCR.place(relx=0.90, rely=0.85, anchor='center')
     LblCR['width']=12
     LblCR['height']=1
+    
     Btn_calculate = tk.Button(Set_Window, text=('Calculate'), bg='white', fg='black', font=('Arial', 12))
     Btn_calculate.place(relx=0.95, rely=0.95, anchor='center')
     Btn_calculate['width']=8
