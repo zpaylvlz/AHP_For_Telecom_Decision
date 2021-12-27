@@ -35,8 +35,18 @@ def Get_Result(label):
     temp0= np.concatenate((temp0, temp3), axis=1)
     
     Result= temp0 * calculated_stage[0]
-    label['text'] = '結果:\n中華電信: '+str(round(Result[0,0], 5))+'\n台灣大哥大: '+str(round(Result[1,0], 5))+ \
-    '\n遠傳電信: '+str(round(Result[2,0], 5))+'\n台灣之星:'+str(round(Result[3,0], 5))+'\n亞太電信: '+str(round(Result[4,0], 5))
+    Res_weight = [0,0,0,0,0]
+    Res_solution=['中華電信','台灣大哥大','遠傳電信','台灣之星','亞太電信']
+    for i in range(5):
+        Res_weight[i] = round(Result[i,0],5)
+    best_weight = max(Res_weight)
+    ans_solution = '建議選擇:\n'
+    ans_str = '結果:\n'
+    for i in range(5):
+        ans_str += Res_solution[i] +": "+ str(Res_weight[i])+"\n"
+        if (Res_weight[i] == best_weight):
+            ans_solution+= Res_solution[i] + " "
+    label['text'] = ans_str + ans_solution
 
 def Get_Scale(value):
     global AHP_val
@@ -90,7 +100,7 @@ def Set_Matrix(stage_ctrl, solution_num, group, stage):
     scale_h = tk.Scale(Set_Window, from_=-8, to=8, tickinterval=16, length=750, resolution=1, orient="horizontal",fg='white', bg='white', command = Get_Scale, showvalue=False)
     scale_h.pack()
     global LblVal
-    LblVal = tk.Label(Set_Window, text=('0'), bg='white', fg='black', font=('Arial', 12))
+    LblVal = tk.Label(Set_Window, text=('1'), bg='white', fg='black', font=('Arial', 12))
     LblVal.place(relx=0.5, rely=0.1, anchor='center')
     LblVal['width']=8
     LblVal['height']=1
@@ -307,9 +317,9 @@ def MainWindow():
     AP_label['height']=1
     
     Result_label = tk.Label(window, text='結果:\n', bg = 'white', fg='black',font=('Arial, 12'), justify=LEFT)
-    Result_label.place(relx=0.6, rely = 0.85,anchor='center')
-    Result_label['width'] = 20
-    Result_label['height'] = 8
+    Result_label.place(relx=0.35, rely = 0.85,anchor='center')
+    Result_label['width'] = 50
+    Result_label['height'] = 10
     
     Result_btn = tk.Button(window, text='計算', bg='white', fg='black', font=('Arial', 12), command= lambda: Get_Result(Result_label))
     Result_btn.place(relx = 0.9, rely = 0.8, anchor = 'center')
